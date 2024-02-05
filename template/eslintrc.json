@@ -1,0 +1,10 @@
+{
+  "extends": "next/core-web-vitals",
+  "plugins": [
+    "@stylistic/eslint-plugin-ts"
+  ],
+  "rules": {
+    "@stylistic/ts/no-extra-semi": "warn",
+    "@stylistic/ts/semi": ["warn", "never"]
+  }
+}
