@@ -153,5 +153,16 @@ await client.request( createPermission( {
     fields: [ "*" ]
 } ) )
 
-console.log( `\nSuccess! Your new project is ready at ${ projectDir }` )
+console.log( `Generate GraphQL API Types.` )
+spawn.sync( 'npm', [ 'run', 'generate' ], { stdio: [ 'inherit', 'ignore', 'inherit' ], cwd: projectDir } )
+
+console.log( `\nSuccess! Your new project is ready. 
+
+You can log in to Directus at ${answers.directusHost}/admin
+Your GraphQL API is at ${answers.directusHost}/graphql
+
+To start NextJS front end server:
+cd ${ projectDir }
+npm run dev` )
+
 process.exit( 0 )
