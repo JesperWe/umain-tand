@@ -6,8 +6,9 @@ import fs from 'fs'
 import { readFile } from 'fs/promises'
 import path from 'path'
 import { fileURLToPath } from 'url'
-import { authentication, createCollection, createDirectus, rest } from '@directus/sdk'
+import { authentication, createCollection, createDirectus, rest, updateMe } from '@directus/sdk'
 import retryFetch from 'node-fetch-retry'
+import { jwtDecode } from "jwt-decode"
 
 const questions = [
     {
@@ -121,9 +122,15 @@ let res = await retryFetch( answers.directusHost,
 console.log( `\nSeeding Directus ...` )
 const client = createDirectus( answers.directusHost ).with( rest() ).with( authentication() )
 await client.login( answers.directusAdmin, answers.directusPasswd )
+const jwt = jwtDecode(await client.getToken())
+
+const token = randomstring.generate( 32 )
+await client.request(updateMe({ token }));
 
 const pages = JSON.parse( await readFile( path.join( directusDir, 'pages.json' ) ) )
+pages.meta.preview_url = `http://localhost:3000/api/draft?secret=${token}&id={{slug}}&version={{$version}}`
 
 await client.request( createCollection( pages ) )
 
 console.log( `\nSuccess! Your new project is ready at ${ projectDir }` )
+process.exit(0)
