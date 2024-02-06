@@ -39,11 +39,19 @@ export async function GET(request: Request) {
         secure: true,
         path: '/',
     })
+    cookies().set('__prerender_token', secret, {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        path: '/',
+    })
+
+    const verStr = (version === 'main') ? '' : '?version=' + version
 
     return new Response(null, {
         status: 307,
         headers: {
-            Location: `/${page.slug}?version=${version}`,
+            Location: `/page/${page.slug}${verStr}`,
         },
     })
 }

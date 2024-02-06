@@ -1,4 +1,4 @@
-import {draftMode} from 'next/headers'
+import {cookies, draftMode} from 'next/headers'
 import {gql} from '@/__generated__/gql'
 import {DynamicPage} from "@/types/collections"
 import {getClient} from "@/app/ApolloClient"
@@ -43,7 +43,8 @@ export const generateStaticParams = async () => {
 }
 
 const Page: React.FC<DynamicPage> = async ({searchParams, params}) => {
-    const client = getClient('')
+    const token = cookies().get('__prerender_token')
+    const client = getClient(token?.value ?? '')
     const {isEnabled} = draftMode()
     console.log({searchParams, params})
 
