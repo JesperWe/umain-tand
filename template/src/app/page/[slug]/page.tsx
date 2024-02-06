@@ -1,6 +1,5 @@
 import {draftMode} from 'next/headers'
 import {gql} from '@/__generated__/gql'
-import {useApolloClient} from '@apollo/client'
 import {DynamicPage} from "@/types/collections"
 import {getClient} from "@/app/ApolloClient"
 
@@ -9,8 +8,8 @@ query Page($slug: String!) {
     pages(filter: { slug: { _eq: $slug } }) {
         id
         slug
-        headline
-        intro
+        title
+        description
         status
         date_updated
     }
@@ -22,8 +21,8 @@ query PagesVersion($id: ID!, $version: String!) {
         id
         status
         slug
-        headline
-        intro
+        title
+        description
         date_updated
     }
 }`)
@@ -34,17 +33,17 @@ query Pages {
         id
         slug
         status
-        headline
+        title
     }
 }`)
 
 export const generateStaticParams = async () => {
-    const r = await getClient().query({query: GET_PAGES})
+    const r = await getClient('').query({query: GET_PAGES})
     return r.data.pages
 }
 
 const Page: React.FC<DynamicPage> = async ({searchParams, params}) => {
-    const client = getClient()
+    const client = getClient('')
     const {isEnabled} = draftMode()
     console.log({searchParams, params})
 
@@ -59,7 +58,9 @@ const Page: React.FC<DynamicPage> = async ({searchParams, params}) => {
 
     return (
         <div>
-            {<h1>{page?.headline}</h1>}
+            <h1>{page?.title}</h1>
+
+            <p>{page?.description}</p>
 
             {isEnabled ? (
                 <p style={{color: 'green'}}>DRAFT MODE</p>

@@ -63,7 +63,6 @@ const templateDir = path.resolve( __dirname, 'template' )
 fs.cpSync( templateDir, projectDir, { recursive: true } )
 
 fs.renameSync( path.join( projectDir, 'gitignore' ), path.join( projectDir, '.gitignore' ) )
-fs.renameSync( path.join( projectDir, 'env.local' ), path.join( projectDir, '.env.local' ) )
 fs.renameSync( path.join( projectDir, 'eslintrc.json' ), path.join( projectDir, '.eslintrc.json' ) )
 
 const projectPackageJson = JSON.parse( await readFile( path.join( projectDir, 'package.json' ) ) )
@@ -73,7 +72,19 @@ fs.writeFileSync(
     JSON.stringify( projectPackageJson, null, 2 )
 )
 
-spawn.sync( 'npm', [ 'install' ], { stdio: [ 'inherit', 'ignore', 'inherit' ] } ) // Show errors but not output
+// Create the admin user API token. TODO Should be a more restricted uer really for the preview...
+
+const token = randomstring.generate( 32 )
+
+fs.writeFileSync(
+    path.join( projectDir, '.env.local' ),
+    `DIRECTUS_PREVIEW_TOKEN=${token}
+DIRECTUS_BASE_URL=${answers.directusHost}
+NEXT_PUBLIC_ASSET_URL=${answers.directusHost}/assets/
+`
+)
+
+spawn.sync( 'npm', [ 'install' ], { stdio: [ 'inherit', 'ignore', 'inherit' ], cwd: projectDir } ) // Show errors but not output
 
 const directusDir = path.resolve( projectDir, 'directus' )
 
@@ -119,15 +130,16 @@ let res = await retryFetch( answers.directusHost,
     }
 )
 
-console.log( `\nSeeding Directus ...`, answers )
+console.log( `\nSeeding Directus.` )
 const client = createDirectus( answers.directusHost ).with( rest() ).with( authentication() )
 await client.login( answers.directusAdmin, answers.directusPasswd )
 
-const token = randomstring.generate( 32 )
 await client.request( updateMe( { token } ) )
 
+// Create the pages collection and make it readable by public.
+
 const pages = JSON.parse( await readFile( path.join( directusDir, 'pages.json' ) ) )
-pages.meta.preview_url = `http://localhost:3000/api/draft?secret=${ token }&id={{slug}}&version={{$version}}`
+pages.meta.preview_url = `http://localhost:3000/api/draft?secret=${ token }&id={{id}}&version={{$version}}`
 
 await client.request( createCollection( pages ) )
 await client.request( createPermission( {

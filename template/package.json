@@ -7,11 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "compile": "graphql-codegen"
+    "generate": "graphql-codegen"
   },
   "dependencies": {
     "@apollo/client": "^3.9.2",
-    "@apollo/experimental-nextjs-app-support": "^0.8.0",
     "graphql": "^16.8.1",
     "next": "14.1.0",
     "react": "^18",

@@ -22,40 +22,44 @@
     "preview_url": "http://localhost:3000/api/draft?secret=EbZD6UdASOGWmxLfSbWTm6RcWRr1bK37&id={{slug}}&version={{$version}}",
     "versioning": true
   },
+  "schema": {
+    "name": "pages",
+    "sql": "CREATE TABLE \"pages\" (`slug` varchar(255) NOT NULL, `status` varchar(255) NOT NULL DEFAULT 'draft', `sort` integer NULL, `user_created` char(36) NULL, `date_created` datetime NULL, `user_updated` char(36) NULL, `date_updated` datetime NULL, `title` varchar(255) null, `description` varchar(255) null, `content` text null, PRIMARY KEY (`slug`), CONSTRAINT `pages_user_updated_foreign` FOREIGN KEY (`user_updated`) REFERENCES `directus_users` (`id`), CONSTRAINT `pages_user_created_foreign` FOREIGN KEY (`user_created`) REFERENCES `directus_users` (`id`))"
+  },
   "fields": [
     {
       "collection": "pages",
-      "field": "slug",
-      "type": "string",
+      "field": "id",
+      "type": "integer",
       "schema": {
-        "name": "slug",
+        "name": "id",
         "table": "pages",
-        "data_type": "varchar",
+        "data_type": "integer",
         "default_value": null,
-        "max_length": 255,
+        "max_length": null,
         "numeric_precision": null,
         "numeric_scale": null,
         "is_generated": false,
         "generation_expression": null,
         "is_nullable": false,
-        "is_unique": true,
+        "is_unique": false,
         "is_primary_key": true,
-        "has_auto_increment": false,
+        "has_auto_increment": true,
         "foreign_key_column": null,
         "foreign_key_table": null
       },
       "meta": {
-        "id": 18,
+        "id": 51,
         "collection": "pages",
-        "field": "slug",
+        "field": "id",
         "special": null,
         "interface": "input",
         "options": null,
         "display": null,
         "display_options": null,
-        "readonly": false,
-        "hidden": false,
-        "sort": 1,
+        "readonly": true,
+        "hidden": true,
+        "sort": 5,
         "width": "full",
         "translations": null,
         "note": null,
@@ -88,7 +92,7 @@
         "foreign_key_table": null
       },
       "meta": {
-        "id": 19,
+        "id": 52,
         "collection": "pages",
         "field": "status",
         "special": null,
@@ -97,15 +101,18 @@
           "choices": [
             {
               "text": "$t:published",
-              "value": "published"
+              "value": "published",
+              "color": "var(--theme--primary)"
             },
             {
               "text": "$t:draft",
-              "value": "draft"
+              "value": "draft",
+              "color": "var(--theme--foreground)"
             },
             {
               "text": "$t:archived",
-              "value": "archived"
+              "value": "archived",
+              "color": "var(--theme--warning)"
             }
           ]
         },
@@ -116,27 +123,30 @@
             {
               "text": "$t:published",
               "value": "published",
-              "foreground": "#FFFFFF",
-              "background": "var(--theme--primary)"
+              "color": "var(--theme--primary)",
+              "foreground": "var(--theme--primary)",
+              "background": "var(--theme--primary-background)"
             },
             {
               "text": "$t:draft",
               "value": "draft",
-              "foreground": "#18222F",
-              "background": "#D3DAE4"
+              "color": "var(--theme--foreground)",
+              "foreground": "var(--theme--foreground)",
+              "background": "var(--theme--background-normal)"
             },
             {
               "text": "$t:archived",
               "value": "archived",
-              "foreground": "#FFFFFF",
-              "background": "var(--theme--warning)"
+              "color": "var(--theme--warning)",
+              "foreground": "var(--theme--warning)",
+              "background": "var(--theme--warning-background)"
             }
           ]
         },
         "readonly": false,
         "hidden": false,
-        "sort": 2,
-        "width": "full",
+        "sort": 3,
+        "width": "half",
         "translations": null,
         "note": null,
         "conditions": null,
@@ -168,7 +178,7 @@
         "foreign_key_table": null
       },
       "meta": {
-        "id": 20,
+        "id": 53,
         "collection": "pages",
         "field": "sort",
         "special": null,
@@ -178,7 +188,7 @@
         "display_options": null,
         "readonly": false,
         "hidden": true,
-        "sort": 3,
+        "sort": 6,
         "width": "full",
         "translations": null,
         "note": null,
@@ -211,7 +221,7 @@
         "foreign_key_table": "directus_users"
       },
       "meta": {
-        "id": 21,
+        "id": 54,
         "collection": "pages",
         "field": "user_created",
         "special": [
@@ -225,7 +235,7 @@
         "display_options": null,
         "readonly": true,
         "hidden": true,
-        "sort": 4,
+        "sort": 7,
         "width": "half",
         "translations": null,
         "note": null,
@@ -258,7 +268,7 @@
         "foreign_key_table": null
       },
       "meta": {
-        "id": 22,
+        "id": 55,
         "collection": "pages",
         "field": "date_created",
         "special": [
@@ -273,7 +283,7 @@
         },
         "readonly": true,
         "hidden": true,
-        "sort": 5,
+        "sort": 8,
         "width": "half",
         "translations": null,
         "note": null,
@@ -306,7 +316,7 @@
         "foreign_key_table": "directus_users"
       },
       "meta": {
-        "id": 23,
+        "id": 56,
         "collection": "pages",
         "field": "user_updated",
         "special": [
@@ -320,7 +330,7 @@
         "display_options": null,
         "readonly": true,
         "hidden": true,
-        "sort": 6,
+        "sort": 9,
         "width": "half",
         "translations": null,
         "note": null,
@@ -353,7 +363,7 @@
         "foreign_key_table": null
       },
       "meta": {
-        "id": 24,
+        "id": 57,
         "collection": "pages",
         "field": "date_updated",
         "special": [
@@ -368,7 +378,7 @@
         },
         "readonly": true,
         "hidden": true,
-        "sort": 7,
+        "sort": 10,
         "width": "half",
         "translations": null,
         "note": null,
@@ -401,7 +411,7 @@
         "foreign_key_table": null
       },
       "meta": {
-        "id": 25,
+        "id": 58,
         "collection": "pages",
         "field": "title",
         "special": null,
@@ -411,12 +421,12 @@
         "display_options": null,
         "readonly": false,
         "hidden": false,
-        "sort": 8,
+        "sort": 1,
         "width": "full",
         "translations": null,
         "note": null,
         "conditions": null,
-        "required": false,
+        "required": true,
         "group": null,
         "validation": null,
         "validation_message": null
@@ -424,10 +434,10 @@
     },
     {
       "collection": "pages",
-      "field": "description",
+      "field": "slug",
       "type": "string",
       "schema": {
-        "name": "description",
+        "name": "slug",
         "table": "pages",
         "data_type": "varchar",
         "default_value": null,
@@ -444,9 +454,9 @@
         "foreign_key_table": null
       },
       "meta": {
-        "id": 26,
+        "id": 59,
         "collection": "pages",
-        "field": "description",
+        "field": "slug",
         "special": null,
         "interface": "input",
         "options": null,
@@ -454,12 +464,12 @@
         "display_options": null,
         "readonly": false,
         "hidden": false,
-        "sort": 9,
-        "width": "full",
+        "sort": 2,
+        "width": "half",
         "translations": null,
         "note": null,
         "conditions": null,
-        "required": false,
+        "required": true,
         "group": null,
         "validation": null,
         "validation_message": null
@@ -467,10 +477,10 @@
     },
     {
       "collection": "pages",
-      "field": "content",
+      "field": "description",
       "type": "text",
       "schema": {
-        "name": "content",
+        "name": "description",
         "table": "pages",
         "data_type": "text",
         "default_value": null,
@@ -487,17 +497,17 @@
         "foreign_key_table": null
       },
       "meta": {
-        "id": 27,
+        "id": 60,
         "collection": "pages",
-        "field": "content",
+        "field": "description",
         "special": null,
-        "interface": "input-rich-text-html",
+        "interface": "input-multiline",
         "options": null,
         "display": null,
         "display_options": null,
         "readonly": false,
         "hidden": false,
-        "sort": 10,
+        "sort": 4,
         "width": "full",
         "translations": null,
         "note": null,
@@ -508,9 +518,5 @@
         "validation_message": null
       }
     }
-  ],
-  "schema": {
-    "name": "pages",
-    "sql": "CREATE TABLE \"pages\" (`slug` varchar(255) NOT NULL, `status` varchar(255) NOT NULL DEFAULT 'draft', `sort` integer NULL, `user_created` char(36) NULL, `date_created` datetime NULL, `user_updated` char(36) NULL, `date_updated` datetime NULL, `title` varchar(255) null, `description` varchar(255) null, `content` text null, PRIMARY KEY (`slug`), CONSTRAINT `pages_user_updated_foreign` FOREIGN KEY (`user_updated`) REFERENCES `directus_users` (`id`), CONSTRAINT `pages_user_created_foreign` FOREIGN KEY (`user_created`) REFERENCES `directus_users` (`id`))"
-  }
+  ]
 }
