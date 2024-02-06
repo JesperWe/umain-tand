@@ -84,6 +84,8 @@ NEXT_PUBLIC_ASSET_URL=${answers.directusHost}/assets/
 `
 )
 
+console.log( `\nInstalling front end.` )
+
 spawn.sync( 'npm', [ 'install' ], { stdio: [ 'inherit', 'ignore', 'inherit' ], cwd: projectDir } ) // Show errors but not output
 
 const directusDir = path.resolve( projectDir, 'directus' )
@@ -117,7 +119,7 @@ services:
 `
     fs.writeFileSync( path.join( directusDir, 'compose.yaml' ), config )
 
-    console.log( `Starting Directus container from ${ directusDir } ...` )
+    console.log( `\nStarting Directus container from ${ directusDir } ...` )
     spawn.sync( 'docker', [ 'compose', 'up', '-d' ], { cwd: directusDir } )
 }
 
